@@ -1,4 +1,6 @@
-package mint.xsd;
+package gr.ntua.edm.validation.xsd;
+
+import gr.ntua.edm.validation.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +17,6 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import mint.util.StringUtils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 

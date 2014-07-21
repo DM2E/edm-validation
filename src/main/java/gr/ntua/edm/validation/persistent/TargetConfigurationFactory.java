@@ -1,4 +1,7 @@
-package mint.persistent;
+package gr.ntua.edm.validation.persistent;
+
+import gr.ntua.edm.validation.util.JSONUtils;
+import gr.ntua.edm.validation.xsd.XSDParser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,11 +15,11 @@ import java.util.Set;
 
 import javax.swing.JFileChooser;
 
-import mint.util.JSONUtils;
-import mint.xsd.XSDParser;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
+
+
 
 
 //import org.apache.commons.io.FileUtils;

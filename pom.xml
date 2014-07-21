@@ -3,6 +3,22 @@
     <groupId>eu.dm2e</groupId>
     <artifactId>edm-validation</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <developers>
+        <developer>
+            <name>Arne Stabenau</name>
+        </developer>
+        <developer>
+            <name>Fotis Xenikoudakis</name>
+        </developer>
+        <developer>
+            <name>Konstantin Baierer</name>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git@github.com:DM2E/edm-validation.git</connection>
+        <url>scm:git:git@github.com:DM2E/edm-validation.git</url>
+        <developerConnection>scm:git:git@github.com:DM2E/edm-validation.git</developerConnection>
+    </scm>
 
     <dependencies>
 

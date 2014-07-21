@@ -1,16 +1,17 @@
-package mint.xsd;
+package gr.ntua.edm.validation.xsd;
 
+
+import gr.ntua.edm.validation.persistent.TargetConfigurationFactory;
+import gr.ntua.edm.validation.persistent.XmlSchema;
+import gr.ntua.edm.validation.schematron.SchematronXSLTProducer;
+import gr.ntua.edm.validation.util.JSONUtils;
+import gr.ntua.edm.validation.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
 
-import mint.persistent.TargetConfigurationFactory;
-import mint.persistent.XmlSchema;
-import mint.schematron.SchematronXSLTProducer;
-import mint.util.JSONUtils;
-import mint.util.StringUtils;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 

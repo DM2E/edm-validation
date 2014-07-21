@@ -1,7 +1,7 @@
 /**
  * 
  */
-package mint.schematron;
+package gr.ntua.edm.validation.schematron;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

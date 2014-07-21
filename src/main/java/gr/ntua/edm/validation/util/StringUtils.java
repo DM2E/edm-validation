@@ -1,4 +1,4 @@
-package mint.util;
+package gr.ntua.edm.validation.util;
 
 import java.io.BufferedReader;
 import java.io.File;

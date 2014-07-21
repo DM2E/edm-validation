@@ -1,4 +1,4 @@
-package mint.xsd;
+package gr.ntua.edm.validation.xsd;
 
 import java.util.ArrayList;
 import java.util.List;

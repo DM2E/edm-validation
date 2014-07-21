@@ -1,17 +1,17 @@
-package test;
+package gr.ntua.edm.validation.test;
 
 
 import static org.fest.assertions.Assertions.*;
+import gr.ntua.edm.validation.persistent.XmlSchema;
+import gr.ntua.edm.validation.xsd.OutputXSD;
+import gr.ntua.edm.validation.xsd.ReportErrorHandler;
+import gr.ntua.edm.validation.xsd.SchemaValidator;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.xml.transform.TransformerException;
 
-import mint.persistent.XmlSchema;
-import mint.xsd.OutputXSD;
-import mint.xsd.ReportErrorHandler;
-import mint.xsd.SchemaValidator;
 import net.minidev.json.parser.ParseException;
 
 import org.junit.Test;

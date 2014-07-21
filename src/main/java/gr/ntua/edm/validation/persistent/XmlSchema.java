@@ -1,11 +1,11 @@
-package mint.persistent;
+package gr.ntua.edm.validation.persistent;
+
+import gr.ntua.edm.validation.xsd.SchemaValidator;
 
 import java.util.Date;
 import java.util.Set;
 
 import javax.xml.validation.Schema;
-
-import mint.xsd.SchemaValidator;
 
 import org.xml.sax.SAXException;
 //import gr.ntua.ivml.mint.mapping.model.SchemaConfiguration;

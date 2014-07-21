@@ -1,4 +1,6 @@
-package mint.xsd;
+package gr.ntua.edm.validation.xsd;
+
+import gr.ntua.edm.validation.persistent.XmlSchema;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -18,8 +20,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
-import mint.persistent.XmlSchema;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
