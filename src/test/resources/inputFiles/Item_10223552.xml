@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rdf:RDF xmlns:ore="http://www.openarchives.org/ore/terms/"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:crm="http://www.cidoc-crm.org/rdfs/cidoc_crm_v5.0.2_english_label.rdfs#"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+         xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:xalan="http://xml.apache.org/xalan"
+         xmlns:edm="http://www.europeana.eu/schemas/edm/"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <edm:ProvidedCHO rdf:about="http://mint-projects.image.ntua.gr/Athena_Plus/ProvidedCHO/Фонд Мераба Мамардашвили/25">
+      <dc:contributor xml:lang="ru">Мамардашвили, Мераб Константинович </dc:contributor>
+      <dc:contributor xml:lang="en">Mamardashvili, Merab </dc:contributor>
+      <dc:contributor xml:lang="fr">Mamardachvili, Merab</dc:contributor>
+      <dc:date>1984</dc:date>
+      <dc:description xml:lang="en">Выступление 21 ноября 1984 г. Presentation November, 21, 1984 Exposé fait le 21 Novembre 1984 </dc:description>
+      <dc:format>Mp3</dc:format>
+      <dc:identifier>25</dc:identifier>
+      <dc:identifier>25</dc:identifier>
+      <dc:rights>Фонд Мераба Мамардашвили</dc:rights>
+      <dc:rights>Merab Mamardashvili Foundtion</dc:rights>
+      <dc:subject xml:lang="ru">Сознание, Философия в России, Грузии, XX век</dc:subject>
+      <dc:subject xml:lang="en">Consciousness, Philosophy in Russia, Georgia, XX century</dc:subject>
+      <dc:subject xml:lang="fr">Conscience, Philosophie russe, XX-ème siecle</dc:subject>
+      <dc:title xml:lang="ru">Сознание и цивилизация. Часть 2</dc:title>
+      <dc:title xml:lang="en">Consciousness and Civilization. Part 2</dc:title>
+      <dc:title xml:lang="fr">Conscience et Civilisation. Part 2 </dc:title>
+      <dc:type rdf:resource="http://partage.vocnet.org/part01158"/>
+      <dc:type xml:lang="en">records (documents)</dc:type>
+      <dc:type xml:lang="en">sound</dc:type>
+      <dc:type xml:lang="en">ru</dc:type>
+      <dc:type xml:lang="ru">выступление, аудиозапись</dc:type>
+      <dc:type xml:lang="en">presentation, audio</dc:type>
+      <dc:type xml:lang="fr">exposé, audio</dc:type>
+      <dcterms:extent>46:08 min</dcterms:extent>
+      <dcterms:provenance>Фонд Мераба Мамардашвили, Moscow</dcterms:provenance>
+      <dcterms:spatial>  </dcterms:spatial>
+      <edm:type>SOUND</edm:type>
+   </edm:ProvidedCHO>
+   <edm:WebResource rdf:about="http://mamardashvili.com/files/mp3/civilization/civilization_84-11-21_2.mp3">
+      <dc:rights>Фонд Мераба Мамардашвили</dc:rights>
+      <dc:rights>Merab Mamardashvili Foundtion</dc:rights>
+   </edm:WebResource>
+   <edm:WebResource rdf:about="http://mamardashvili.com/files/mp3/civilization/civilization_84-11-21_2.mp3">
+      <dc:rights>Фонд Мераба Мамардашвили</dc:rights>
+      <dc:rights>Merab Mamardashvili Foundtion</dc:rights>
+   </edm:WebResource>
+   <edm:WebResource rdf:about="http://mamardashvili.com/files/mp3/civilization/civilization_84-11-21_2.mp3"/>
+   <skos:Concept rdf:about="http://partage.vocnet.org/part01158">
+      <skos:prefLabel xml:lang="de">Dokument</skos:prefLabel>
+      <skos:prefLabel xml:lang="en">records (documents)</skos:prefLabel>
+      <skos:prefLabel xml:lang="it">documento</skos:prefLabel>
+      <skos:altLabel xml:lang="de">Dokumente</skos:altLabel>
+      <skos:altLabel xml:lang="it">documenti</skos:altLabel>
+   </skos:Concept>
+   <ore:Aggregation rdf:about="http://mint-projects.image.ntua.gr/Athena_Plus/Aggregation/Фонд Мераба Мамардашвили/25">
+      <edm:aggregatedCHO rdf:resource="http://mint-projects.image.ntua.gr/Athena_Plus/ProvidedCHO/Фонд Мераба Мамардашвили/25"/>
+      <edm:dataProvider>Фонд Мераба Мамардашвили</edm:dataProvider>
+      <edm:hasView rdf:resource="http://mamardashvili.com/files/mp3/civilization/civilization_84-11-21_2.mp3"/>
+      <edm:isShownAt rdf:resource="http://mamardashvili.com/files/mp3/civilization/civilization_84-11-21_2.mp3"/>
+      <edm:isShownBy rdf:resource="http://mamardashvili.com/files/mp3/civilization/civilization_84-11-21_2.mp3"/>
+      <edm:provider>Athena_Plus</edm:provider>
+      <edm:rights rdf:resource="http://www.europeana.eu/rights/rr-f/"/>
+   </ore:Aggregation>
+</rdf:RDF>

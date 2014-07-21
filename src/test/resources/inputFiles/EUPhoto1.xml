@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ImageMetadata xmlns:tns="http://www.example.org/EuPhotoSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/EuPhotoSchema EuPhotoSchema.xsd ">
+  <tns:AdministrativeMetadata>
+    <tns:Identifier>108_0851b</tns:Identifier>
+    <tns:MetadataURI>http://www.image.ntua.gr/~nsimou/EuPhoto/Data/108_0851b.xml</tns:MetadataURI>
+    <tns:PhotoURI>http://www.image.ntua.gr/~nsimou/EuPhoto/Image/108_0851b.jpeg</tns:PhotoURI>
+    <tns:Organisation>IVML</tns:Organisation>
+  </tns:AdministrativeMetadata>
+  <tns:DescriptiveMetadata>
+    <tns:Title>The Parthenon</tns:Title>
+    <tns:Date>2013-09-14</tns:Date>
+    <tns:Photographer>Petros Katsaros</tns:Photographer>
+    <tns:Photographic_Technique>Digital Camera</tns:Photographic_Technique>
+    <tns:Location>Athens, Greece</tns:Location>
+    <tns:Photographic_Practice>The photo was taken for the composition of an album with ancient Greek monuments</tns:Photographic_Practice>
+    <tns:Material>High Quality Paper</tns:Material>
+    <tns:Description>The west facade of the Parthenon</tns:Description>
+    <tns:Copyright>Ancient-Greece.org</tns:Copyright>
+    <tns:Dimensions>400x323</tns:Dimensions>
+  </tns:DescriptiveMetadata>
+  <tns:RetrievalMetadata>
+    <tns:Subject>Ancient Greece</tns:Subject>
+    <tns:Subject>The Parthenon</tns:Subject>
+    <tns:Actor>Unknown</tns:Actor>
+    <tns:Place>Greece</tns:Place>
+    <tns:Place>Athens</tns:Place>
+    <tns:Related_Object>108_0853</tns:Related_Object>
+    <tns:Related_Object>108_0868</tns:Related_Object>
+    <tns:Related_Object>108_0874b</tns:Related_Object>
+    <tns:Related_Object>108_0874f</tns:Related_Object>
+  </tns:RetrievalMetadata>
+</tns:ImageMetadata>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rdf:RDF xmlns:ore="http://www.openarchives.org/ore/terms/"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:crm="http://www.cidoc-crm.org/rdfs/cidoc_crm_v5.0.2_english_label.rdfs#"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
+         xmlns:dcterms="http://purl.org/dc/terms/"
+         xmlns:xalan="http://xml.apache.org/xalan"
+         xmlns:edm="http://www.europeana.eu/schemas/edm/"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+   <edm:ProvidedCHO rdf:about="http://mint-projects.image.ntua.gr/Athena_Plus/ProvidedCHO/Фонд Мераба Мамардашвили/18">
+      <dc:contributor xml:lang="ru">Мамардашвили, Мераб Константинович </dc:contributor>
+      <dc:contributor xml:lang="en">Mamardashvili, Merab </dc:contributor>
+      <dc:contributor xml:lang="fr">Mamardachvili, Merab</dc:contributor>
+      <dc:date>1980</dc:date>
+      <dc:description xml:lang="en">Из курса лекций во Всесоюзном государственном институте кинематографии (ВГИК) 1980 г. Аудиозапись From a series of lectures in All-Union State Institute of Cinematography, 1980
+Audio record
+ Du cours fait à l’ Institut National de la cinématographie, 1980. Enregistrement audio </dc:description>
+      <dc:format>Mp3</dc:format>
+      <dc:identifier>18</dc:identifier>
+      <dc:identifier>18</dc:identifier>
+      <dc:rights>Фонд Мераба Мамардашвили</dc:rights>
+      <dc:rights>Merab Mamardashvili Foundtion</dc:rights>
+      <dc:subject xml:lang="ru">Античная философия, Философия в России, Грузии, XX век</dc:subject>
+      <dc:subject xml:lang="en">Ancient Philosophy, Philosophy in Russia, Georgia, XX century</dc:subject>
+      <dc:subject xml:lang="fr">Philisophie antique, Philosophie russe, XX-ème siecle</dc:subject>
+      <dc:title xml:lang="ru">Лекции по античной философии. Лекция 11. Часть 1</dc:title>
+      <dc:title xml:lang="en">Lectures on Ancient Philosophy. Lecture 11. Part 1</dc:title>
+      <dc:title xml:lang="fr">Conférences sur la philisophie antique. Conférence 11. Part 1</dc:title>
+      <dc:type rdf:resource="http://partage.vocnet.org/part01158"/>
+      <dc:type xml:lang="en">records (documents)</dc:type>
+      <dc:type xml:lang="en">sound</dc:type>
+      <dc:type xml:lang="en">ru</dc:type>
+      <dc:type xml:lang="ru">Лекция, аудио</dc:type>
+      <dc:type xml:lang="en">Lecture, audio</dc:type>
+      <dc:type xml:lang="fr">Conférence, audio</dc:type>
+      <dcterms:extent>40:59 min</dcterms:extent>
+      <dcterms:provenance>Фонд Мераба Мамардашвили, Moscow</dcterms:provenance>
+      <dcterms:spatial>Москва Moscow Moscou</dcterms:spatial>
+      <edm:type>SOUND</edm:type>
+   </edm:ProvidedCHO>
+   <edm:WebResource rdf:about="http://mamardashvili.com/files/mp3/antiquity/antic11a.mp3">
+      <dc:rights>Фонд Мераба Мамардашвили</dc:rights>
+      <dc:rights>Merab Mamardashvili Foundtion</dc:rights>
+   </edm:WebResource>
+   <edm:WebResource rdf:about="http://mamardashvili.com/files/mp3/antiquity/antic11a.mp3">
+      <dc:rights>Фонд Мераба Мамардашвили</dc:rights>
+      <dc:rights>Merab Mamardashvili Foundtion</dc:rights>
+   </edm:WebResource>
+   <edm:WebResource rdf:about="http://mamardashvili.com/files/mp3/antiquity/antic11a.mp3"/>
+   <skos:Concept rdf:about="http://partage.vocnet.org/part01158">
+      <skos:prefLabel xml:lang="de">Dokument</skos:prefLabel>
+      <skos:prefLabel xml:lang="en">records (documents)</skos:prefLabel>
+      <skos:prefLabel xml:lang="it">documento</skos:prefLabel>
+      <skos:altLabel xml:lang="de">Dokumente</skos:altLabel>
+      <skos:altLabel xml:lang="it">documenti</skos:altLabel>
+   </skos:Concept>
+   <ore:Aggregation rdf:about="http://mint-projects.image.ntua.gr/Athena_Plus/Aggregation/Фонд Мераба Мамардашвили/18">
+      <edm:aggregatedCHO rdf:resource="http://mint-projects.image.ntua.gr/Athena_Plus/ProvidedCHO/Фонд Мераба Мамардашвили/18"/>
+      <edm:dataProvider>Фонд Мераба Мамардашвили</edm:dataProvider>
+      <edm:hasView rdf:resource="http://mamardashvili.com/files/mp3/antiquity/antic11a.mp3"/>
+      <edm:isShownAt rdf:resource="http://mamardashvili.com/files/mp3/antiquity/antic11a.mp3"/>
+      <edm:isShownBy rdf:resource="http://mamardashvili.com/files/mp3/antiquity/antic11a.mp3"/>
+      <edm:provider>Athena_Plus</edm:provider>
+      <edm:rights rdf:resource="http://www.europeana.eu/rights/rr-f/"/>
+   </ore:Aggregation>
+</rdf:RDF>
