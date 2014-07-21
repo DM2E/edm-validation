@@ -1,4 +1,4 @@
-package gr.ntua.edm.validation.xsd;
+package gr.ntua.ivml.edmvalidation.xsd;
 
 import java.util.ArrayList;
 import java.util.List;

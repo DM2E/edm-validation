@@ -1,16 +1,20 @@
 /**
  * 
  */
-package gr.ntua.edm.validation.schematron;
+package gr.ntua.ivml.edmvalidation.schematron;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
 
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -19,18 +23,23 @@ import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author geomark
  *
  */
 public class SchematronXSLTProducer {
+	
+	private static final Logger log = LoggerFactory.getLogger(SchematronXSLTProducer.class);
 
 	private static SchematronXSLTProducer INSTANCE;
 	private static TransformerFactory tFactory;
-	private static String iso_dsdl_include;
-	private static String iso_abstract_expand;
-	private static String iso_svrl_for_xslt2;
-//	private static String iso_schematron_skeleton_for_saxon;
+	private static String iso_dsdl_include = "/schematron/iso_dsdl_include.xsl";
+	private static String iso_abstract_expand = "/schematron/iso_abstract_expand.xsl";
+	private static String iso_svrl_for_xslt2 = "/schematron/iso_svrl_for_xslt2.xsl";
+//	private static String iso_schematron_skeleton_for_saxon = "iso_schematron_skeleton_for_saxon.xsl";
 	
 	
 	/**
@@ -47,12 +56,18 @@ public class SchematronXSLTProducer {
 	public static SchematronXSLTProducer getInstance(){
 		if(INSTANCE == null){
 			tFactory = TransformerFactory.newInstance();
+			tFactory.setURIResolver(new URIResolver() {
+				@Override
+				public Source resolve(String href, String base) throws TransformerException {
+					href = "/schematron/" + href;
+					log.debug("Resolving XSL import '" + href + "'.");
+					InputStream is = SchematronXSLTProducer.class.getResourceAsStream(href);
+			        StreamSource jarFileSS = new StreamSource();
+			        jarFileSS.setInputStream(is);
+			        return jarFileSS;
+				}
+			});
 			
-			iso_dsdl_include = SchematronXSLTProducer.class.getResource("iso_dsdl_include.xsl").getPath();
-			iso_abstract_expand = SchematronXSLTProducer.class.getResource("iso_abstract_expand.xsl").getPath();
-			iso_svrl_for_xslt2 = SchematronXSLTProducer.class.getResource("iso_svrl_for_xslt2.xsl").getPath();
-//			iso_schematron_skeleton_for_saxon = SchematronXSLTProducer.class.getResource("iso_schematron_skeleton_for_saxon.xsl").getPath();
-
 			INSTANCE = new SchematronXSLTProducer();
 		}
 
@@ -65,9 +80,9 @@ public class SchematronXSLTProducer {
 	 * @return
 	 */
 	public String getXSL(String schematron) {				
-		String step1 = preformTransformation(schematron,iso_dsdl_include);
-		String step2 = preformTransformation(step1,iso_abstract_expand);
-		String finalstep = preformTransformation(step2,iso_svrl_for_xslt2);
+		String step1 = performTransformation(schematron, SchematronXSLTProducer.class.getResourceAsStream(iso_dsdl_include));
+		String step2 = performTransformation(step1,SchematronXSLTProducer.class.getResourceAsStream(iso_abstract_expand));
+		String finalstep = performTransformation(step2,SchematronXSLTProducer.class.getResourceAsStream(iso_svrl_for_xslt2));
 		return finalstep;
 	}
 	
@@ -103,7 +118,7 @@ public class SchematronXSLTProducer {
 	 * @param xslt
 	 * @return
 	 */
-	private String preformTransformation(String xml, String xslt){
+	private String performTransformation(String xml, InputStream xslt){
 		try {
 		    StringReader reader = new StringReader(xml);
 		    StringWriter writer = new StringWriter();

@@ -1,11 +1,13 @@
-package gr.ntua.edm.validation.xsd;
+package gr.ntua.ivml.edmvalidation.xsd;
 
-import gr.ntua.edm.validation.persistent.XmlSchema;
+import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 
@@ -21,14 +23,21 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.apache.log4j.Logger;
+import org.apache.xerces.dom.DOMInputImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
 public class SchemaValidator {	
-	public static final Logger log = Logger.getLogger( SchemaValidator.class );
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(SchemaValidator.class);
+	
 	private static SchemaFactory factory;
 	private static TransformerFactory tFactory;
 
@@ -41,6 +50,31 @@ public class SchemaValidator {
 		try {
 			factory.setFeature("http://apache.org/xml/features/validation/schema-full-checking", false);
 			factory.setFeature("http://apache.org/xml/features/honour-all-schemaLocations", true);
+			factory.setResourceResolver(new LSResourceResolver() {
+				
+				@Override
+				public LSInput resolveResource(String type,
+						String namespaceURI,
+						String publicId,
+						String systemId,
+						String baseURI) {
+
+					LSInput input = new DOMInputImpl();
+					final String name = "/schemas/edm/" + new File(systemId).getName();
+					log.debug("Classpath name: " + name);
+					InputStream classpathIS = XSDParser.class.getResourceAsStream(name);
+					if (null != classpathIS) {
+						log.debug("Resolving from classpath.");
+						input.setByteStream(classpathIS);
+						// HACK
+						input.setSystemId("http://foo" + name);
+						return input;
+					} else {
+						log.error("Can't resolve in classpath.");
+						return null;
+					}
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -215,13 +249,18 @@ public class SchemaValidator {
 		return schema;
 	}
 	
-	public static synchronized Schema getSchema( XmlSchema xmlSchema ) throws SAXException  {
+	public static synchronized Schema getSchema( XmlSchema xmlSchema ) throws SAXException, FileNotFoundException  {
 		Schema schema = schemaCache.get(xmlSchema.getId());
 		
 		if(schema == null) {
-//			String fullPath = Config.getSchemaPath(xmlSchema.getXsd());
-			String fullPath = SchemaValidator.class.getResource(xmlSchema.getXsd()).getFile();
-			schema = factory.newSchema(new File(fullPath));
+			InputStream is = SchemaValidator.class.getResourceAsStream(xmlSchema.getXsd());
+			if (null == is) {
+				is = new FileInputStream(new File(xmlSchema.getXsd()));
+			}
+			final StreamSource isource = new StreamSource(is);
+			final String id = "http://foo/" + xmlSchema.getXsd();
+			isource.setSystemId(id);
+			schema = factory.newSchema(isource);
 			schemaCache.put(xmlSchema.getId(), schema);
 		}
 

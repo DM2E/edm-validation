@@ -1,11 +1,11 @@
-package gr.ntua.edm.validation.test;
+package gr.ntua.ivml.edmvalidation.test;
 
 
 import static org.fest.assertions.Assertions.*;
-import gr.ntua.edm.validation.persistent.XmlSchema;
-import gr.ntua.edm.validation.xsd.OutputXSD;
-import gr.ntua.edm.validation.xsd.ReportErrorHandler;
-import gr.ntua.edm.validation.xsd.SchemaValidator;
+import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
+import gr.ntua.ivml.edmvalidation.xsd.OutputXSD;
+import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler;
+import gr.ntua.ivml.edmvalidation.xsd.SchemaValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 
 public class ValidateTest {
 	
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(ValidateTest.class);
 	private final String schemaPath = "/schemas/edm/EDM.xsd";
 	private OutputXSD xsd;

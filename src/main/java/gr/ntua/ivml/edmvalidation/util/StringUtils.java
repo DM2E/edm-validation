@@ -1,8 +1,7 @@
-package gr.ntua.edm.validation.util;
+package gr.ntua.ivml.edmvalidation.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -217,23 +216,23 @@ public class StringUtils {
 		return(( val == null) || ( val.trim().length()==0 ));
 	}
 
-	public static StringBuffer fileContents(File file) throws IOException {
-		return fileContents(file, false);
-	}
-
-	public static StringBuffer fileContents(File file, boolean addNewline) throws IOException {
-		StringBuffer buffer = new StringBuffer();
-		
-		String line;
-		BufferedReader in = new BufferedReader(new FileReader(file));
-		while((line = in.readLine()) != null) {
-			buffer.append(line + ((addNewline)?"\n":""));
-		}
-		in.close();
-		
-		return buffer;
-	}
-	
+//	public static StringBuffer fileContents(File file) throws IOException {
+//		return fileContents(file, false);
+//	}
+//
+//	public static StringBuffer fileContents(File file, boolean addNewline) throws IOException {
+//		StringBuffer buffer = new StringBuffer();
+//		
+//		String line;
+//		BufferedReader in = new BufferedReader(new FileReader(file));
+//		while((line = in.readLine()) != null) {
+//			buffer.append(line + ((addNewline)?"\n":""));
+//		}
+//		in.close();
+//		
+//		return buffer;
+//	}
+//	
 	public static String xmlContents(File file) throws ValidityException, ParsingException, IOException {
 		nu.xom.Builder builder = new nu.xom.Builder();
 		nu.xom.Document doc = builder.build(file);

@@ -1,7 +1,7 @@
-package gr.ntua.edm.validation.persistent;
+package gr.ntua.ivml.edmvalidation.persistent;
 
-import gr.ntua.edm.validation.util.JSONUtils;
-import gr.ntua.edm.validation.xsd.XSDParser;
+import gr.ntua.ivml.edmvalidation.util.JSONUtils;
+import gr.ntua.ivml.edmvalidation.xsd.XSDParser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,8 +18,6 @@ import javax.swing.JFileChooser;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
-
-
 
 
 //import org.apache.commons.io.FileUtils;

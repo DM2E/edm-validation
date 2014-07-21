@@ -1,6 +1,6 @@
-package gr.ntua.edm.validation.xsd;
+package gr.ntua.ivml.edmvalidation.xsd;
 
-import gr.ntua.edm.validation.util.StringUtils;
+import gr.ntua.ivml.edmvalidation.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,14 +82,51 @@ public class XSDParser {
 	}
 
 	private void initParser() {
-		//log.debug("initParser");
+		log.debug("initParser");
+
+		if (this.parser == null) {
+			log.error("schema parser is null!");
+			return;
+		}
+
+		ErrorHandler errorHandler = new ErrorHandler() {
+
+			@Override
+			public void error(SAXParseException arg0) throws SAXException {
+				log.error("error: ", arg0);
+			}
+
+			@Override
+			public void fatalError(SAXParseException arg0)
+					throws SAXException {
+				log.error("fatal: " + arg0.getMessage());
+			}
+
+			@Override
+			public void warning(SAXParseException arg0) throws SAXException {
+				log.error("warning: " + arg0.getMessage());
+			}
+		};
+		this.parser.setErrorHandler(errorHandler);
+
 		this.parser.setEntityResolver(new EntityResolver() {
 
 			@Override
-			public InputSource resolveEntity(String arg0, String arg1)
-					throws SAXException, IOException {
-				log.debug("Resolving: " + arg0 + " => " + arg1);
-				return null;
+			public InputSource resolveEntity(String publicID, String systemID) throws SAXException, IOException {
+				log.debug("Resolving: " + publicID + " => " + systemID);
+				final String name = "/schemas/edm/" + new File(systemID).getName();
+				log.debug("Classpath name: " + name);
+				InputStream classpathIS = XSDParser.class.getResourceAsStream(name);
+				if (null != classpathIS) {
+					log.debug("Resolving from classpath.");
+					final InputSource isource = new InputSource(classpathIS);
+					// HACK
+					isource.setSystemId("http://foo/" + name);
+					return isource;
+				} else {
+					log.debug("Can't resolve in classpath.");
+					return null;
+				}
 			}
 			
 		});
@@ -98,30 +135,7 @@ public class XSDParser {
 
 		// System.out.println(schemaFileName + ":");
 
-		if (this.parser == null) {
-			log.error("schema parser is null!");
-		} else {
-			ErrorHandler errorHandler = new ErrorHandler() {
-
-				@Override
-				public void error(SAXParseException arg0) throws SAXException {
-					log.error("error: " + arg0.getMessage());
-
-				}
-
-				@Override
-				public void fatalError(SAXParseException arg0)
-						throws SAXException {
-					log.error("fatal: " + arg0.getMessage());
-				}
-
-				@Override
-				public void warning(SAXParseException arg0) throws SAXException {
-					log.error("warning: " + arg0.getMessage());
-				}
-			};
-			this.parser.setErrorHandler(errorHandler);
-		}
+		log.debug("DONE initParser.");
 	}
 
 	private void initXSSchema(String schemaFileName) {
@@ -138,7 +152,9 @@ public class XSDParser {
 	private void initXSSchema(InputStream is) {
 		try {
 			this.initParser();
-			this.parser.parse(is);
+			final InputSource isource = new InputSource(is);
+			isource.setSystemId("http://foo");
+			this.parser.parse(isource);
 			this.schemaSet = this.parser.getResult();
 		} catch (Exception ex) {
 			ex.printStackTrace();

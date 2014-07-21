@@ -1,28 +1,30 @@
-package gr.ntua.edm.validation.xsd;
+package gr.ntua.ivml.edmvalidation.xsd;
 
 
-import gr.ntua.edm.validation.persistent.TargetConfigurationFactory;
-import gr.ntua.edm.validation.persistent.XmlSchema;
-import gr.ntua.edm.validation.schematron.SchematronXSLTProducer;
-import gr.ntua.edm.validation.util.JSONUtils;
-import gr.ntua.edm.validation.util.StringUtils;
+import gr.ntua.ivml.edmvalidation.persistent.TargetConfigurationFactory;
+import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
+import gr.ntua.ivml.edmvalidation.schematron.SchematronXSLTProducer;
+import gr.ntua.ivml.edmvalidation.util.JSONUtils;
+import gr.ntua.ivml.edmvalidation.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Set;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.ParseException;
 
-import org.apache.log4j.Logger;
-import org.apache.xerces.xs.datatypes.XSDouble;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputXSD  {
 	  
 	//private static final long serialVersionUID = 1L;
 	  
-	protected final Logger log = Logger.getLogger(getClass());
+	private static final Logger log = LoggerFactory.getLogger(OutputXSD.class);
 		
 	private String id = null;
 	private XmlSchema xmlschema;
@@ -37,67 +39,6 @@ public class OutputXSD  {
 		setXmlschema(xmlSchema);
 	}
 	
-//	public List<String> getAvailablexsd(String path) {
-//		List<String> result = new ArrayList<String>();
-//
-//		try {
-//			File schemaDir = new File(path);
-//			File[] contents = schemaDir.listFiles();
-//			for(int i = 0; i < contents.length; i++) {
-//				File file = contents[i];
-//				String filename = file.getAbsolutePath();
-//				
-//				if(file.isDirectory()) {
-//					result.addAll(this.getAvailablexsd(file.getAbsolutePath()));
-//				} else if(filename.toLowerCase().endsWith(".xsd")) {
-//					result.add(filename);
-//				}
-//			}
-//		} catch(Exception ex) {
-//			ex.printStackTrace();
-//		}
-//
-//		return result;
-//	}
-//	
-//	public List<String> getAvailablexsd() {
-//		List<String> result = new ArrayList<String>();
-//		List<String> filenames = new ArrayList<String>();
-//		
-//		String schemaDir = Config.getSchemaDir().getAbsolutePath();
-//		result = this.getAvailablexsd(schemaDir);
-//		
-//		Iterator<String> i = result.iterator();
-//		while(i.hasNext()) {
-//			String path = i.next();
-//			String replaced = path.replace(schemaDir, "");
-//			filenames.add(replaced);
-//		}
-//		
-//		return filenames;
-//	}
-//	
-//	public List<String> getAvailableXSL()
-//	{
-//		List<String> result = new ArrayList<String>();
-//
-//		try {
-//			File schemaDir = Config.getSchemaDir();
-//			String[] contents = schemaDir.list();
-//			for(int i = 0; i < contents.length; i++) {
-//				String filename = contents[i];
-//				if(filename.toLowerCase().endsWith(".xsl")) {
-//					result.add(filename);
-//				}
-//			}
-//		} catch(Exception ex) {
-//			ex.printStackTrace();
-//		}
-//
-//		return result;
-//	}
-
-  
 	public String getId()
 	{
 		return id;
@@ -136,16 +77,17 @@ public class OutputXSD  {
 
 		String confFilename = schema.getXsd() + ".conf";
 		
-		URL confFile = OutputXSD.class.getResource(confFilename);
-		if(confFile != null) {
+		InputStream confFileIS = OutputXSD.class.getResourceAsStream(confFilename);
+		if(confFileIS != null) {
 			log.debug("Found configuration: " + confFilename);
-			StringBuffer confcontents = StringUtils.fileContents(new File(confFile.getFile()));
-			schema.setJsonConfig(confcontents.toString());
+			StringWriter sw = new StringWriter();
+			IOUtils.copy(confFileIS, sw);
+			schema.setJsonConfig(sw.toString());
 		} else {
 			schema.setJsonConfig(null);
 		}
 
-		String xsdBaseName = OutputXSD.class.getResource(schema.getXsd()).getFile();
+		InputStream xsdIS = OutputXSD.class.getResourceAsStream(schema.getXsd());
 		TargetConfigurationFactory factory = null;
 		
 		try {
@@ -161,7 +103,7 @@ public class OutputXSD  {
 		JSONObject configuration = null;
 		if(schema.getJsonConfig() == null || schema.getJsonConfig().length() == 0) {
 			log.debug("Generating default configuration");
-			if(factory.getParser() == null) factory.setParser(xsdBaseName);
+			if(factory.getParser() == null) factory.setParser(xsdIS);
 			configuration = factory.getConfiguration(true);
 			configuration.put("xsd", schema.getXsd());
 			schema.setJsonConfig(configuration.toString());
@@ -173,7 +115,7 @@ public class OutputXSD  {
 		
 		if(schema.getJsonOriginal() == null || reparse) {
 			// generate mapping template
-			if(factory.getParser() == null) factory.setParser(xsdBaseName);
+			if(factory.getParser() == null) factory.setParser(xsdIS);
 			log.debug("Get schematron rules...");
 			Set<String> fsr = factory.getSchematronRules();
 			schema.setSchematronRules(fsr);
@@ -233,7 +175,9 @@ public class OutputXSD  {
 		if(schematronRules != null) {
 			log.debug("Generate schematron XSL...");
 			String wrapped = SchematronXSLTProducer.getInstance().wrapRules(schematronRules, null);
+			log.debug("Wrapped schematron XSL...");
 			schematronXSL = SchematronXSLTProducer.getInstance().getXSL(wrapped);		
+			log.debug("Generated schematron XSL.");
 		}
 		schema.setSchematronXSL(schematronXSL);
 
@@ -257,6 +201,7 @@ public class OutputXSD  {
 		}
 		
 		// Clear any cached objects in SchemaValidator
+		log.debug("Clear cached objects.");
 		SchemaValidator.clearCaches(schema);
 	}
 	

@@ -1,4 +1,4 @@
-package gr.ntua.edm.validation.util;
+package gr.ntua.ivml.edmvalidation.util;
 
 
 import java.io.InputStream;

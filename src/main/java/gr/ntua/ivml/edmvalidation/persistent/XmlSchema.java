@@ -1,7 +1,8 @@
-package gr.ntua.edm.validation.persistent;
+package gr.ntua.ivml.edmvalidation.persistent;
 
-import gr.ntua.edm.validation.xsd.SchemaValidator;
+import gr.ntua.ivml.edmvalidation.xsd.SchemaValidator;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import javax.xml.validation.Schema;
 
 import org.xml.sax.SAXException;
 //import gr.ntua.ivml.mint.mapping.model.SchemaConfiguration;
+
 
 public class XmlSchema {
 	public class Parameter {
@@ -173,10 +175,7 @@ public class XmlSchema {
 		this.schematronXSL = xsl;
 	}
 	
-
-	
-	
-	public Schema getSchema() throws SAXException {
+	public Schema getSchema() throws SAXException, FileNotFoundException {
 		return SchemaValidator.getSchema(this);
 	}
 	
