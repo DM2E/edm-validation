@@ -2,7 +2,7 @@ package gr.ntua.ivml.edmvalidation.xsd;
 
 import gr.ntua.ivml.edmvalidation.util.StringUtils;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerException;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -54,11 +55,9 @@ public class XSDParser {
 	// private XSSchema schema = null;
 	private XSSchemaSet schemaSet = null;
 	HashMap<String, String> namespaces = new HashMap<String, String>();
-
 	JSONObject documentation = null;
 	HashSet<String> schematronRules = null;
-
-
+	
 	//private MappingCache cache = new MappingCache();
 	
 	public XSDParser(String xsd) {
@@ -114,19 +113,17 @@ public class XSDParser {
 			@Override
 			public InputSource resolveEntity(String publicID, String systemID) throws SAXException, IOException {
 				log.debug("Resolving: " + publicID + " => " + systemID);
-				final String name = "/schemas/edm/" + new File(systemID).getName();
-				log.debug("Classpath name: " + name);
-				InputStream classpathIS = XSDParser.class.getResourceAsStream(name);
-				if (null != classpathIS) {
-					log.debug("Resolving from classpath.");
-					final InputSource isource = new InputSource(classpathIS);
-					// HACK
-					isource.setSystemId("http://foo/" + name);
-					return isource;
+				
+				final InputSource isource = new InputSource();
+				final String name = systemID.replaceFirst(StringUtils.DUMMY_SYSTEMID_PREFIX, "");
+				final InputStream is = StringUtils.resolveNameToInputStream(name);
+				if (null != is) {
+					isource.setByteStream(is);
+					isource.setSystemId(StringUtils.DUMMY_SYSTEMID_PREFIX + name);
 				} else {
-					log.debug("Can't resolve in classpath.");
-					return null;
+					log.error("Can't resolve '" + name + "' in classpath or on disk.");
 				}
+				return isource;
 			}
 			
 		});
@@ -139,34 +136,28 @@ public class XSDParser {
 	}
 
 	private void initXSSchema(String schemaFileName) {
-		try {
-			File file = new File(schemaFileName);
-			this.initParser();
-			this.parser.parse(file);
-			this.schemaSet = this.parser.getResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void initXSSchema(InputStream is) {
-		try {
-			this.initParser();
-			final InputSource isource = new InputSource(is);
-			isource.setSystemId("http://foo");
-			this.parser.parse(isource);
-			this.schemaSet = this.parser.getResult();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		initXSSchema(StringUtils.resolveNameToInputStream(schemaFileName), schemaFileName);
 	}
 
 	private void initXSSchema(Reader reader) {
+		initXSSchema(new ReaderInputStream(reader));
+	}
+	private void initXSSchema(InputStream is) {
+		initXSSchema(is, StringUtils.DUMMY_SYSTEMID_PREFIX + "rootStyleSheet");
+	}
+
+	private void initXSSchema(InputStream is, String systemId) {
 		try {
+			if (null == is) {
+				throw new FileNotFoundException("InputStream is null");
+			}
 			this.initParser();
-			this.parser.parse(reader);
+			final InputSource isource = new InputSource(is);
+			isource.setSystemId(systemId);
+			this.parser.parse(isource);
 			this.schemaSet = this.parser.getResult();
 		} catch (Exception ex) {
+			log.error(ex);
 			ex.printStackTrace();
 		}
 	}

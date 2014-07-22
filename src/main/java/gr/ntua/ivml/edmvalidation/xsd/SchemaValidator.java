@@ -1,6 +1,7 @@
 package gr.ntua.ivml.edmvalidation.xsd;
 
 import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
+import gr.ntua.ivml.edmvalidation.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -53,26 +54,18 @@ public class SchemaValidator {
 			factory.setResourceResolver(new LSResourceResolver() {
 				
 				@Override
-				public LSInput resolveResource(String type,
-						String namespaceURI,
-						String publicId,
-						String systemId,
-						String baseURI) {
+				public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) { 
 
-					LSInput input = new DOMInputImpl();
-					final String name = "/schemas/edm/" + new File(systemId).getName();
-					log.debug("Classpath name: " + name);
-					InputStream classpathIS = XSDParser.class.getResourceAsStream(name);
-					if (null != classpathIS) {
-						log.debug("Resolving from classpath.");
-						input.setByteStream(classpathIS);
-						// HACK
-						input.setSystemId("http://foo" + name);
-						return input;
+					final LSInput input = new DOMInputImpl();
+					final String name = systemId.replaceFirst(StringUtils.DUMMY_SYSTEMID_PREFIX, "");
+					final InputStream is = StringUtils.resolveNameToInputStream(name);
+					if (null != is) {
+						input.setByteStream(is);
+						input.setSystemId(StringUtils.DUMMY_SYSTEMID_PREFIX + name);
 					} else {
-						log.error("Can't resolve in classpath.");
-						return null;
+						log.error("Can't resolve '" + name + "' in classpath or on disk.");
 					}
+					return input;
 				}
 			});
 		} catch (Exception e) {
@@ -253,12 +246,9 @@ public class SchemaValidator {
 		Schema schema = schemaCache.get(xmlSchema.getId());
 		
 		if(schema == null) {
-			InputStream is = SchemaValidator.class.getResourceAsStream(xmlSchema.getXsd());
-			if (null == is) {
-				is = new FileInputStream(new File(xmlSchema.getXsd()));
-			}
+			InputStream is = StringUtils.resolveNameToInputStream(xmlSchema.getXsd());
 			final StreamSource isource = new StreamSource(is);
-			final String id = "http://foo/" + xmlSchema.getXsd();
+			final String id = StringUtils.DUMMY_SYSTEMID_PREFIX + xmlSchema.getXsd();
 			isource.setSystemId(id);
 			schema = factory.newSchema(isource);
 			schemaCache.put(xmlSchema.getId(), schema);

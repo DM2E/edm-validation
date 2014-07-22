@@ -77,7 +77,7 @@ public class OutputXSD  {
 
 		String confFilename = schema.getXsd() + ".conf";
 		
-		InputStream confFileIS = OutputXSD.class.getResourceAsStream(confFilename);
+		InputStream confFileIS = StringUtils.resolveNameToInputStream(confFilename);
 		if(confFileIS != null) {
 			log.debug("Found configuration: " + confFilename);
 			StringWriter sw = new StringWriter();
@@ -87,7 +87,10 @@ public class OutputXSD  {
 			schema.setJsonConfig(null);
 		}
 
-		InputStream xsdIS = OutputXSD.class.getResourceAsStream(schema.getXsd());
+		InputStream xsdIS = StringUtils.resolveNameToInputStream(schema.getXsd());
+		if (xsdIS == null) {
+			log.error("Couldn't resolve schema " + schema);
+		}
 		TargetConfigurationFactory factory = null;
 		
 		try {

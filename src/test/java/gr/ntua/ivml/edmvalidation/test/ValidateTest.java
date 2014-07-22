@@ -30,7 +30,6 @@ public class ValidateTest {
 	public ValidateTest() throws Exception {
 		xmlSchema = new XmlSchema();
 		xmlSchema.setXsd(schemaPath);
-		xmlSchema.setId(new Long(0));
 		xsd = new OutputXSD(xmlSchema);
 		xsd.processSchema(xmlSchema);	
 	}
@@ -41,34 +40,34 @@ public class ValidateTest {
 	 */
 	@Test
 	public void testValid() throws Exception {
-			final File folder = new File(ValidateTest.class.getResource("/expect-valid/.dummy").getFile()).getParentFile();
-			for (File inputFile : folder.listFiles()) {
-				if (! inputFile.isFile() || inputFile.length() == 0) continue;
-				ReportErrorHandler err1 = SchemaValidator.validateXSD(inputFile, xmlSchema);
-				assertThat(err1.isValid()).overridingErrorMessage(inputFile + " is NOT VALID according to XSD: " + err1.getReportMessage()).isTrue();
-				String err2 = SchemaValidator.validateSchematron(inputFile, xmlSchema);
-				assertThat(err2.length()).overridingErrorMessage(inputFile + " is NOT VALID according to Schematron: " + err2).isEqualTo(0);
-		    }	
+		final File folder = new File(ValidateTest.class.getResource("/expect-valid/.dummy").getFile()).getParentFile();
+		for (File inputFile : folder.listFiles()) {
+			if (! inputFile.isFile() || inputFile.length() == 0) continue;
+			ReportErrorHandler err1 = SchemaValidator.validateXSD(inputFile, xmlSchema);
+			assertThat(err1.isValid()).overridingErrorMessage(inputFile + " is NOT VALID according to XSD: " + err1.getReportMessage()).isTrue();
+			String err2 = SchemaValidator.validateSchematron(inputFile, xmlSchema);
+			assertThat(err2.length()).overridingErrorMessage(inputFile + " is NOT VALID according to Schematron: " + err2).isEqualTo(0);
+		}	
 	}
 	
 	@Test
 	public void testInvalidByXSD() throws Exception {
-			final File folder = new File(ValidateTest.class.getResource("/expect-invalid-xsd/.dummy").getFile()).getParentFile();
-			for (File inputFile : folder.listFiles()) {
-				if (! inputFile.isFile() || inputFile.length() == 0) continue;
-				ReportErrorHandler err1 = SchemaValidator.validateXSD(inputFile, xmlSchema);
-				assertThat(err1.isValid()).overridingErrorMessage(inputFile + " IS VALID according to XSD!").isFalse();
-		    }	
+		final File folder = new File(ValidateTest.class.getResource("/expect-invalid-xsd/.dummy").getFile()).getParentFile();
+		for (File inputFile : folder.listFiles()) {
+			if (! inputFile.isFile() || inputFile.length() == 0) continue;
+			ReportErrorHandler err1 = SchemaValidator.validateXSD(inputFile, xmlSchema);
+			assertThat(err1.isValid()).overridingErrorMessage(inputFile + " IS VALID according to XSD!").isFalse();
+		}	
 	}
 
 	@Test
 	public void testInvalidBySchematron() throws Exception {
-			final File folder = new File(ValidateTest.class.getResource("/expect-invalid-schematron/.dummy").getFile()).getParentFile();
-			for (File inputFile : folder.listFiles()) {
-				if (! inputFile.isFile() || inputFile.length() == 0) continue;
-				String err2 = SchemaValidator.validateSchematron(inputFile, xmlSchema);
-				assertThat(err2.length()).overridingErrorMessage(inputFile + " IS VALID according to Schematron!").isGreaterThan(0);
-		    }	
+		final File folder = new File(ValidateTest.class.getResource("/expect-invalid-schematron/.dummy").getFile()).getParentFile();
+		for (File inputFile : folder.listFiles()) {
+			if (! inputFile.isFile() || inputFile.length() == 0) continue;
+			String err2 = SchemaValidator.validateSchematron(inputFile, xmlSchema);
+			assertThat(err2.length()).overridingErrorMessage(inputFile + " IS VALID according to Schematron!").isGreaterThan(0);
+		}	
 	}
 
 	/**
@@ -85,8 +84,8 @@ public class ValidateTest {
 			OutputXSD xsd = new OutputXSD(xmlSchema);
 			xsd.processSchema(xmlSchema);
 			for (File inputFile : folder.listFiles()) {
-		        if (inputFile.isFile()) {
-		        	ReportErrorHandler err1 = SchemaValidator.validateXSD(inputFile, xmlSchema);
+				if (inputFile.isFile()) {
+					ReportErrorHandler err1 = SchemaValidator.validateXSD(inputFile, xmlSchema);
 					if (err1.isValid()) {
 						System.out.println("Input file " + inputFile.getName() + " is valid according to schema.");
 						String err2 = SchemaValidator.validateSchematron(inputFile, xmlSchema);
@@ -98,8 +97,8 @@ public class ValidateTest {
 					else {
 						System.out.println("Input file " + inputFile.getName() + " is invalid due to schema:\n" + err1.getReportMessage());
 					}
-		        }   
-		    }	
+				}   
+			}	
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
