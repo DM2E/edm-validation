@@ -122,7 +122,7 @@ public class OutputXSD  {
 			log.debug("Get schematron rules...");
 			Set<String> fsr = factory.getSchematronRules();
 			schema.setSchematronRules(fsr);
-			log.debug("-- schematron rules: " + schema.getSchematronRules());
+//			log.debug("-- schematron rules: " + schema.getSchematronRules());
 			log.debug("Get documentation");
 			schema.setDocumentation(factory.getDocumentation().toString());
 		} 

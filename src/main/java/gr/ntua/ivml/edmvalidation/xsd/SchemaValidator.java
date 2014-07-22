@@ -168,33 +168,33 @@ public class SchemaValidator {
 
 	// Schematron validation
 
-	public static String validateSchematron(String input, XmlSchema schema) throws TransformerException, SAXException, IOException {
+	public static ReportErrorHandler validateSchematron(String input, XmlSchema schema) throws TransformerException, SAXException, IOException {
 		return SchemaValidator.validateSchematron(input, schema, new ReportErrorHandler());
 	}
 
-	public static String validateSchematron(String input, XmlSchema schema, ReportErrorHandler handler) throws TransformerException, SAXException, IOException {
+	public static ReportErrorHandler validateSchematron(String input, XmlSchema schema, ReportErrorHandler handler) throws TransformerException, SAXException, IOException {
 		byte[] bytes = input.getBytes("UTF-8");
 		ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 		StreamSource source = new StreamSource(stream);
 		return SchemaValidator.validateSchematron(source, schema, handler);
 	}
 	
-	public static String validateSchematron(File input, XmlSchema schema) throws TransformerException, SAXException, IOException {
+	public static ReportErrorHandler validateSchematron(File input, XmlSchema schema) throws TransformerException, SAXException, IOException {
 		return SchemaValidator.validateSchematron(input, schema, new ReportErrorHandler());
 	}
 
-	public static String validateSchematron(File input, XmlSchema schema, ReportErrorHandler handler) throws TransformerException, SAXException, IOException {
+	public static ReportErrorHandler validateSchematron(File input, XmlSchema schema, ReportErrorHandler handler) throws TransformerException, SAXException, IOException {
 		StreamSource source = new StreamSource(new FileInputStream(input));
 		return SchemaValidator.validateSchematron(source, schema, handler);
 	}
 	
-	public static String validateSchematron(Source source, XmlSchema schema) throws TransformerException {
+	public static ReportErrorHandler validateSchematron(Source source, XmlSchema schema) throws TransformerException {
 		return SchemaValidator.validateSchematron(source, schema, new ReportErrorHandler());
 	}
 		
-	public static String validateSchematron(Source source, XmlSchema schema, ReportErrorHandler handler) throws TransformerException {
+	public static ReportErrorHandler validateSchematron(Source source, XmlSchema schema, ReportErrorHandler handler) throws TransformerException {
 		
-		String errorReport = "";
+		if (handler == null) handler = new ReportErrorHandler();
 		if(schema.getSchematronXSL() != null) {					
 			DOMResult result = new DOMResult();
 	
@@ -208,18 +208,13 @@ public class SchemaValidator {
 		    	if(  "failed-assert".equals(nresult.getLocalName())) {
 		    		ReportErrorHandler.Error error = handler.new Error();
 		    		error.setMessage(nresult.getTextContent());
+		    		error.setSource(nresult.getAttributes().getNamedItem("location").getTextContent());
 		    		
-		    		if(handler != null) handler.addError(error);
-		    		
-		    		StringBuffer sb =  new StringBuffer();
-		    		sb.append(nresult.getTextContent());
-		    		sb.append("\n");
-		    		errorReport += sb.toString();
+		    		handler.addError(error);
 		    	}
 		    }
 		}
-		
-	    return errorReport;
+		return handler;
 	}
 	
 	private static synchronized Transformer getTransformer(XmlSchema schema) throws TransformerConfigurationException {

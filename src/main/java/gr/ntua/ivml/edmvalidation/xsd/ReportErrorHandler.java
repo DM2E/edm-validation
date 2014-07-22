@@ -83,7 +83,7 @@ public class ReportErrorHandler implements ErrorHandler {
 	}
 
 	public String getReportMessage() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		if(isValid()) {
 //			return "XML is valid";
 		} else {
@@ -92,8 +92,10 @@ public class ReportErrorHandler implements ErrorHandler {
 				result.append("\n");
 			}
 			for( Error err: errors ) {
-				result.append( err.getMessage());
-				result.append( "\n" );
+				result.append(err.getSource());
+				result.append("\n\t" );
+				result.append(err.getMessage());
+				result.append("\n" );
 			}
 		}
 		
@@ -119,6 +121,11 @@ public class ReportErrorHandler implements ErrorHandler {
 	public void reset() {
 		errors.clear();
 		report.clear();
+	}
+	
+	@Override
+	public String toString() {
+		return getReportMessage();
 	}
 
 }
