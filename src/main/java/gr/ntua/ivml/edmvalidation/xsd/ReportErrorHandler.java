@@ -88,10 +88,12 @@ public class ReportErrorHandler implements ErrorHandler {
 //			return "XML is valid";
 		} else {
 			for(SAXParseException e: report) {
+				result.append("VALIDATION ERROR: ");
 				result.append(e.getMessage());
 				result.append("\n");
 			}
 			for( Error err: errors ) {
+				result.append("VALIDATION ERROR: ");
 				result.append(err.getSource());
 				result.append("\n\t" );
 				result.append(err.getMessage());
