@@ -1,6 +1,7 @@
-package gr.ntua.ivml.edmvalidation.cli;
+package gr.ntua.ivml.edmvalidation;
 
 import static org.fest.assertions.Assertions.*;
+import gr.ntua.ivml.edmvalidation.EdmSchemaValidator;
 import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler;
 
 import java.io.File;

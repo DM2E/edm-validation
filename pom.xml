@@ -110,7 +110,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>gr.ntua.ivml.edmvalidation.cli.EdmValidationCLI</mainClass>
+                                    <mainClass>gr.ntua.ivml.edmvalidation.EdmSchemaValidator</mainClass>
                                 </manifest>
                             </archive>
                             <finalName>edm-validation</finalName>

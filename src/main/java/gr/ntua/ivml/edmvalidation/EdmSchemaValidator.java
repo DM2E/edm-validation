@@ -1,4 +1,4 @@
-package gr.ntua.ivml.edmvalidation.cli;
+package gr.ntua.ivml.edmvalidation;
 
 import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
 import gr.ntua.ivml.edmvalidation.util.StringUtils;
@@ -7,9 +7,16 @@ import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler;
 import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler.Error;
 import gr.ntua.ivml.edmvalidation.xsd.SchemaValidator;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashSet;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -46,9 +53,38 @@ public class EdmSchemaValidator {
 		}	
 	}
 	
+	private static boolean shouldBeValidated(File f) {
+		return (f.isFile() && f.getName().endsWith("xml"));
+	}
+	
 	public static void main(String[] args) {
-		ReportErrorHandler report = validateAgainstEdm(args[0]);
-		System.out.println(report);
+		HashSet<File> files = new HashSet<File>();
+		for (String thingum : args) {
+			File f = new File(thingum);
+			// non-recursive
+			if (f.isDirectory()) {
+				for (File ff : f.listFiles()) {
+					if (shouldBeValidated(ff)) {
+						files.add(ff);
+					}
+				}
+			} else if (shouldBeValidated(f)) {
+				files.add(f);
+			}
+		}
+		for (File file : files) {
+			ReportErrorHandler report = validateAgainstEdm(file);
+			Path outputFile = Paths.get(file.getAbsolutePath() + ".validation.txt");
+			BufferedWriter out;
+			try {
+				out = Files.newBufferedWriter(outputFile, Charset.forName("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+				out.write(report.getReportMessage());
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(128);
+			}
+		}
 	}
 	
 	public static ReportErrorHandler validateAgainstEdm(String fname, boolean validateXsd, boolean validateSchematron) {
