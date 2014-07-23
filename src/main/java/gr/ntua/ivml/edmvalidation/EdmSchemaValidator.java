@@ -74,7 +74,11 @@ public class EdmSchemaValidator {
 		}
 		for (File file : files) {
 			ReportErrorHandler report = validateAgainstEdm(file);
-			Path outputFile = Paths.get(file.getAbsolutePath() + ".validation.txt");
+			if (report.isValid()) {
+				// Don't write reports for valid data
+				continue;
+			}
+			Path outputFile = Paths.get(file.getAbsolutePath() + ".edm-validation.txt");
 			BufferedWriter out;
 			try {
 				out = Files.newBufferedWriter(outputFile, Charset.forName("UTF-8"), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -129,8 +133,6 @@ public class EdmSchemaValidator {
 			log.error("Schematron validation failed (bug).");
 			System.exit(1);
 		}
-		StringBuilder sb = new StringBuilder();
-		sb.append("*** EDM VALIDATION REPORT ***");
 		for (Error err : errXSD.getErrors()) errReturn.addError(err);
 		for (Error err : errSCH.getErrors()) errReturn.addError(err);
 		return errReturn;
