@@ -200,18 +200,28 @@ public class SchemaValidator {
 	
 			Transformer transformer = getTransformer(schema);
 		    transformer.transform(source, result);
-//		    log.debug("schematron result: " + StringUtils.fromDOM(result.getNode()));
 		    
 		    NodeList nresults = result.getNode().getFirstChild().getChildNodes();
+		    boolean failed = false;
 		    for(int i=0; i < nresults.getLength();i++){
 		    	Node nresult = nresults.item(i);
-		    	if(  "failed-assert".equals(nresult.getLocalName())) {
+		    	if("failed-assert".equals(nresult.getLocalName())) {
+		    		failed = true;
 		    		ReportErrorHandler.Error error = handler.new Error();
-		    		error.setMessage(nresult.getTextContent());
-		    		error.setSource(nresult.getAttributes().getNamedItem("location").getTextContent());
+		    		// Not that helpful
+//					error.setSource(nresult.getAttributes().getNamedItem("location").getTextContent());
+		    		String textContent = nresult.getTextContent();
+		    		textContent = textContent.replaceAll("\\s\\s+", " ");
+					final String res = textContent.substring(textContent.indexOf('<')+1, textContent.indexOf('>'));
+					final String errMess = textContent.substring(textContent.indexOf('>') + 1);
+		    		error.setMessage(errMess);
+		    		error.setSource(res);
 		    		
 		    		handler.addError(error);
 		    	}
+		    }
+		    if (failed) {
+		    	log.trace("Schematron result: " + StringUtils.fromDOM(result.getNode()));
 		    }
 		}
 		return handler;

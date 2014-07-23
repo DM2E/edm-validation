@@ -39,7 +39,7 @@
       <sch:pattern>
         <sch:rule context="*">
           <sch:assert test="not(@rdf:resource = '')"> 
-            Empty rdf:resource attribute is not allowed for <sch:name/> element.
+              &lt;<sch:name/>&gt; Empty rdf:resource attribute is not allowed for <sch:name/> element.
           </sch:assert>
         </sch:rule>
       </sch:pattern>
@@ -54,6 +54,7 @@
         <sch:pattern>
           <sch:rule context="*">
             <sch:assert test="not(@rdf:about = '')"> 
+              &lt;<sch:name/>&gt;
               Empty rdf:about attribute is not allowed for <sch:name/> element.
             </sch:assert>
           </sch:rule>
@@ -69,6 +70,7 @@
         <sch:pattern>
           <sch:rule context="*">
             <sch:assert test="not(@xml:lang = '')"> 
+              &lt;<sch:name/>&gt;
               Empty xml:lang attribute is not allowed for <sch:name/> element.
             </sch:assert>
           </sch:rule>
@@ -100,6 +102,7 @@
         <sch:pattern>
           <sch:rule context="*">
             <sch:assert test="not(@rdf:resource and text())"> 
+              &lt;<sch:name/>&gt;
               Element <sch:name/> should not have both rdf:resource attribute and text value populated.
             </sch:assert>
           </sch:rule>

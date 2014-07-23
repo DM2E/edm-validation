@@ -137,8 +137,9 @@
         <sch:pattern>
           <sch:rule context="edm:WebResource">
             <sch:assert test="not(dct:hasPart[text()])"> 
-              The element dcterms:isPartOf should not have a literal value in the edm:WebResource context
-              with id: <sch:value-of select="@rdf:about"/>. Use an rdf:resource instead. 
+              &lt;<sch:value-of select="@rdf:about"/>&gt; The element
+              dcterms:isPartOf should not have a literal value in the
+              edm:WebResource context. Use an rdf:resource instead. 
             </sch:assert>
           </sch:rule>
         </sch:pattern>

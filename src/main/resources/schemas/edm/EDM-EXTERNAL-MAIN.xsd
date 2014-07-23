@@ -69,14 +69,14 @@
 					<sch:pattern>
 						<sch:rule context="edm:ProvidedCHO">
 							<sch:assert	test="dc:subject or dc:type or (dc:coverage or dct:temporal) or dct:spatial">
-								id: <sch:value-of select="@rdf:about" />
-								- A ProvidedCHO must have a dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial.
+								&lt;<sch:value-of select="@rdf:about"/>&gt;
+								A ProvidedCHO must have a dc:subject or dc:type or dc:coverage or dct:temporal or dct:spatial.
 							</sch:assert>
 							<sch:assert test="dc:title or dc:description">
-								id: <sch:value-of select="@rdf:about" /> - A ProvidedCHO must have a dc:title or dc:description.
+								&lt;<sch:value-of select="@rdf:about"/>&gt; A ProvidedCHO must have a dc:title or dc:description.
 							</sch:assert>
 							<sch:assert test="not(edm:type='TEXT') or (edm:type='TEXT' and exists(dc:language))">
-								id:	<sch:value-of select="@rdf:about" /> - dc:language is mandatory for TEXT objects.
+								&lt;<sch:value-of select="@rdf:about"/>&gt; dc:language is mandatory for TEXT objects.
 							</sch:assert>
 						</sch:rule>
 					</sch:pattern>
