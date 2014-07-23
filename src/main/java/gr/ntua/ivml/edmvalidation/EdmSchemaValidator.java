@@ -53,7 +53,7 @@ public class EdmSchemaValidator {
 		}	
 	}
 	
-	private static boolean shouldBeValidated(File f) {
+	public static boolean shouldBeValidated(File f) {
 		return (f.isFile() && f.getName().endsWith("xml"));
 	}
 	

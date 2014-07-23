@@ -56,13 +56,13 @@ public class ReportErrorHandler implements ErrorHandler {
 	}
 	
 	private void handleException(SAXParseException e) {
-		report.add(e);
+//		report.add(e);
 		
 		Error error = new Error();
 		error.setLine(e.getLineNumber());
 		error.setColumn(e.getColumnNumber());
 		error.setMessage(e.getMessage());
-		error.setSource(e.getClass().getName());
+		error.setSource(e.getSystemId());
 		
 		errors.add(error);
 	}
@@ -84,23 +84,18 @@ public class ReportErrorHandler implements ErrorHandler {
 
 	public String getReportMessage() {
 		StringBuilder result = new StringBuilder();
-		if(isValid()) {
-//			return "XML is valid";
-		} else {
-			for(SAXParseException e: report) {
-				result.append("VALIDATION ERROR: ");
-				result.append(e.getMessage());
-				result.append("\n");
-			}
-			for( Error err: errors ) {
-				result.append("VALIDATION ERROR: ");
-				result.append(err.getSource());
-				result.append("\n\t" );
-				result.append(err.getMessage());
-				result.append("\n" );
-			}
+		for( Error err: errors ) {
+			result.append("EDM VALIDATION ERROR: ");
+			result.append(err.getSource());
+			result.append(" [" );
+			result.append(err.getLine());
+			result.append(" / " );
+			result.append(err.getColumn());
+			result.append("]" );
+			result.append("\n\t" );
+			result.append(err.getMessage());
+			result.append("\n" );
 		}
-		
 		return result.toString();
 	}
 
