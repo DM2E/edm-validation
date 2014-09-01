@@ -69,6 +69,7 @@
                     <element ref="edm:isSuccessorOf" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:realizes" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>
+                <attribute name="oaiIdentifier"/>
             </extension>
         </complexContent>
     </complexType>
@@ -309,7 +310,7 @@
         </annotation>
     </element>
     
-    <element name="hasMet" type="rdf:LiteralType">
+    <element name="hasMet" type="rdf:ResourceType">
         <annotation>
             <documentation> edm:hasMet relates a resource with the objects or phenomena that have
                 happened to or have happened together with the resource under consideration. We can
