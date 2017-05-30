@@ -17,19 +17,20 @@ public class EdmSchemaValidatorTest {
 
 	@Test
 	public void testValid() throws Exception {
+		EdmSchemaValidator validator = new EdmSchemaValidator();
 		final File folder = new File(EdmSchemaValidatorTest.class.getResource("/expect-valid/.dummy").getFile()).getParentFile();
 		for (File inputFile : folder.listFiles()) {
 			if (! EdmSchemaValidator.shouldBeValidated(inputFile)) continue;
 			{
-				ReportErrorHandler err = EdmSchemaValidator.validateAgainstEdm(inputFile, true, false);
+				ReportErrorHandler err = validator.validateAgainstEdm(inputFile, true, false);
 				assertThat(err.isValid()).overridingErrorMessage(inputFile + " is NOT VALID according to XSD: " + err.getReportMessage()).isTrue();
 			}
 			{
-				ReportErrorHandler err = EdmSchemaValidator.validateAgainstEdm(inputFile, false, true);
+				ReportErrorHandler err = validator.validateAgainstEdm(inputFile, false, true);
 				assertThat(err.isValid()).overridingErrorMessage(inputFile + " is NOT VALID according to Schematron: " + err).isTrue();
 			}
 			{
-				ReportErrorHandler err = EdmSchemaValidator.validateAgainstEdm(inputFile);
+				ReportErrorHandler err = validator.validateAgainstEdm(inputFile);
 				assertThat(err.isValid()).overridingErrorMessage(inputFile + " is NOT VALID according to XSD/Schematron: " + err).isTrue();
 			}
 		}	
@@ -37,10 +38,11 @@ public class EdmSchemaValidatorTest {
 	
 	@Test
 	public void testInvalidByXSD() throws Exception {
+		EdmSchemaValidator validator = new EdmSchemaValidator();
 		final File folder = new File(EdmSchemaValidatorTest.class.getResource("/expect-invalid-xsd/.dummy").getFile()).getParentFile();
 		for (File inputFile : folder.listFiles()) {
 			if (! EdmSchemaValidator.shouldBeValidated(inputFile)) continue;
-			ReportErrorHandler err1 = EdmSchemaValidator.validateAgainstEdm(inputFile, true, false);
+			ReportErrorHandler err1 = validator.validateAgainstEdm(inputFile, true, false);
 			assertThat(err1.isValid()).overridingErrorMessage(inputFile + " IS VALID according to XSD!").isFalse();
 			log.debug(err1.toString());
 		}	
@@ -48,10 +50,11 @@ public class EdmSchemaValidatorTest {
 
 	@Test
 	public void testInvalidBySchematron() throws Exception {
+		EdmSchemaValidator validator = new EdmSchemaValidator();
 		final File folder = new File(EdmSchemaValidatorTest.class.getResource("/expect-invalid-schematron/.dummy").getFile()).getParentFile();
 		for (File inputFile : folder.listFiles()) {
 			if (! EdmSchemaValidator.shouldBeValidated(inputFile)) continue;
-			ReportErrorHandler err2 = EdmSchemaValidator.validateAgainstEdm(inputFile, false, true);
+			ReportErrorHandler err2 = validator.validateAgainstEdm(inputFile, false, true);
 			assertThat(err2.isValid()).overridingErrorMessage(inputFile + " IS VALID according to Schematron!").isFalse();
 			log.debug(err2.toString());
 		}	
