@@ -27,6 +27,9 @@
   xmlns:owl="http://www.w3.org/2002/07/owl#"
   xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
   xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:ebucore="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#"
+
+        xmlns:svcs="http://rdfs.org/sioc/services#"
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   elementFormDefault="qualified">
 
@@ -44,6 +47,9 @@
   <import namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#" schemaLocation="RDF.xsd" />
   <import namespace="http://rdvocab.info/ElementsGr2/" schemaLocation="RDAGR2.xsd"/>
   <import namespace="http://www.w3.org/2003/01/geo/wgs84_pos#" schemaLocation="WGS84.xsd" />
+  <import namespace="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#" schemaLocation="EBUCORE.xsd" />
+  <import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
+
   <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
   
   <complexType name="AgentType">
@@ -74,7 +80,9 @@
           <element ref="rdaGr2:dateOfEstablishment" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:dateOfTermination" maxOccurs="1" minOccurs="0"/>
           <element ref="rdaGr2:gender" maxOccurs="1" minOccurs="0"/>
-          <element ref="rdaGr2:professionOrOccupation" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:placeOfBirth" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:placeOfDeath" maxOccurs="1" minOccurs="0"/>
+          <element ref="rdaGr2:professionOrOccupation" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
@@ -137,9 +145,8 @@
         <sch:pattern>
           <sch:rule context="edm:WebResource">
             <sch:assert test="not(dct:hasPart[text()])"> 
-              &lt;<sch:value-of select="@rdf:about"/>&gt; The element
-              dcterms:isPartOf should not have a literal value in the
-              edm:WebResource context. Use an rdf:resource instead. 
+              The element dcterms:isPartOf should not have a literal value in the edm:WebResource context
+              with id: <sch:value-of select="@rdf:about"/>. Use an rdf:resource instead. 
             </sch:assert>
           </sch:rule>
         </sch:pattern>
@@ -148,10 +155,12 @@
     <complexContent>
       <extension base="rdf:AboutType">
         <sequence>
+          <element ref="dc:creator" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:description" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:format" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:rights" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dc:source" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="dc:type" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:conformsTo" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:created" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="dcterms:extent" maxOccurs="unbounded" minOccurs="0"/>
@@ -161,6 +170,26 @@
           <element ref="dcterms:issued" maxOccurs="unbounded" minOccurs="0"/>
           <element ref="edm:isNextInSequence" maxOccurs="1" minOccurs="0"/>
           <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>
+          <element ref="owl:sameAs" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="rdf:type" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:codecName" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:hasMimeType" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:fileByteSize" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:duration" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:width" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:height" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:spatialResolution" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:sampleSize" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:sampleRate" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:bitRate" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:frameRate" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:hasColorSpace" maxOccurs="1" minOccurs="0"/>
+          <element ref="edm:componentColor" maxOccurs="6" minOccurs="0"/>
+          <element ref="ebucore:orientation" maxOccurs="1" minOccurs="0"/>
+          <element ref="ebucore:audioChannelNumber" maxOccurs="1" minOccurs="0"/>
+          <element ref="dcterms:isReferencedBy" maxOccurs="unbounded" minOccurs="0"/>
+          <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
+          <element ref="svcs:has_service" maxOccurs="unbounded" minOccurs="0"/>
         </sequence>
       </extension>
     </complexContent>
