@@ -1,6 +1,7 @@
 package gr.ntua.ivml.edmvalidation.persistent;
 
 import gr.ntua.ivml.edmvalidation.util.JSONUtils;
+import gr.ntua.ivml.edmvalidation.util.NameToStreamResolver;
 import gr.ntua.ivml.edmvalidation.xsd.XSDParser;
 
 import java.io.BufferedReader;
@@ -34,8 +35,9 @@ public class TargetConfigurationFactory {
 		if(args.length > 0) {
 			String xsd = args[0];
 			
+			log.debug("factory for xsd "+xsd);
 			@SuppressWarnings("unused")
-			TargetConfigurationFactory factory = new TargetConfigurationFactory(xsd);
+			TargetConfigurationFactory factory = new TargetConfigurationFactory(new XSDParser(xsd, new NameToStreamResolver()));
 		} else {
 			try {
 				JFileChooser chooser = new JFileChooser();
@@ -47,7 +49,8 @@ public class TargetConfigurationFactory {
 
 //					String path = "/Users/mith/EDMSchemaV8.xsd";
 //					String output = "/Users/mith/template.json";
-					TargetConfigurationFactory factory = new TargetConfigurationFactory(path);
+					log.debug("factory for xsd "+path);
+					TargetConfigurationFactory factory = new TargetConfigurationFactory(new XSDParser(path, new NameToStreamResolver()));
 	
 					StringBuffer buffer = new StringBuffer();
 					
@@ -77,31 +80,12 @@ public class TargetConfigurationFactory {
 		this.parser = null;
 	}
 	
-	public TargetConfigurationFactory(String file) {
-		log.debug("factory for xsd: " + file);
-		this.parser = new XSDParser(file);
+	public TargetConfigurationFactory(XSDParser parser) {
+		this.parser = parser;
 	}
 	
-	public TargetConfigurationFactory(InputStream stream) {
-		this.parser = new XSDParser(stream);
-	}
-	
-	public TargetConfigurationFactory(Reader reader) {
-		this.parser = new XSDParser(reader);
-	}
-	
-	public void setParser(String file) {
-		this.parser = new XSDParser(file);
-		if(this.configuration != null) setParserNamespacesFromConfiguration();
-	}
-	
-	public void setParser(InputStream stream) {
-		this.parser = new XSDParser(stream);
-		if(this.configuration != null) setParserNamespacesFromConfiguration();
-	}
-	
-	public void setParser(Reader reader) {
-		this.parser = new XSDParser(reader);
+	public void setParser(XSDParser parser) {
+		this.parser = parser;
 		if(this.configuration != null) setParserNamespacesFromConfiguration();
 	}
 	

@@ -43,8 +43,7 @@ public class StringUtils {
 	
 	private static final Logger log = LoggerFactory.getLogger(StringUtils.class);
 	
-	public static final String DUMMY_SYSTEMID_PREFIX = "http://DUMMY/";
-	public static final String SCHEMA_PREFIX = "/schemas/edm/";
+
 	
 	
 	private static DateFormat isoDateFormat = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ") ;
@@ -436,30 +435,6 @@ public class StringUtils {
 
 		return buffer.toString();
 	}
-	
-	/**
-	 * Try to resolve a filename first to a file in the classpath, then to a file on disk.
-	 * TODO: Make the SCHEMA_PREFIX configurable. Problem is that this is called in static contexts
-	 * @param fname
-	 * @return InputStream of the classpath resource/file or null.
-	 */
-	public static InputStream resolveNameToInputStream(String fname) {
-		InputStream is = null;
-		log.debug("Searching for '" + fname + "' in classpath.");
-		is = StringUtils.class.getResourceAsStream(fname);
-		if (is == null) {
-			try {
-				is = new FileInputStream(new File(fname));
-			} catch (FileNotFoundException e) {
-				// deliberately don't handle this
-			}
-		}
-		if (is == null) {
-			fname = SCHEMA_PREFIX + fname;
-			log.debug("Searching for '" + fname + "' in classpath.");
-			is = StringUtils.class.getResourceAsStream(fname);
-		}
-		return is;
-	}
+
 	
 }
