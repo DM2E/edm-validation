@@ -5,6 +5,7 @@ import gr.ntua.ivml.edmvalidation.persistent.TargetConfigurationFactory;
 import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
 import gr.ntua.ivml.edmvalidation.schematron.SchematronXSLTProducer;
 import gr.ntua.ivml.edmvalidation.util.JSONUtils;
+import gr.ntua.ivml.edmvalidation.util.NameToStreamResolver;
 import gr.ntua.ivml.edmvalidation.util.StringUtils;
 
 import java.io.File;
@@ -34,8 +35,14 @@ public class OutputXSD  {
 	
 	private String textdata = "";
 	
+	// handle on the SchemaValidator to update caches
+	private SchemaValidator schemaValidator;
 	
-	public OutputXSD(XmlSchema xmlSchema) {
+	private NameToStreamResolver resolver;
+	
+	public OutputXSD(XmlSchema xmlSchema, SchemaValidator schemaValidator, NameToStreamResolver resolver) {
+		this.schemaValidator = schemaValidator;
+		this.resolver = resolver;
 		setXmlschema(xmlSchema);
 	}
 	
@@ -77,7 +84,7 @@ public class OutputXSD  {
 
 		String confFilename = schema.getXsd() + ".conf";
 		
-		InputStream confFileIS = StringUtils.resolveNameToInputStream(confFilename);
+		InputStream confFileIS = this.resolver.resolveNameToInputStream(confFilename);
 		if(confFileIS != null) {
 			log.debug("Found configuration: " + confFilename);
 			StringWriter sw = new StringWriter();
@@ -87,7 +94,7 @@ public class OutputXSD  {
 			schema.setJsonConfig(null);
 		}
 
-		InputStream xsdIS = StringUtils.resolveNameToInputStream(schema.getXsd());
+		InputStream xsdIS = this.resolver.resolveNameToInputStream(schema.getXsd());
 		if (xsdIS == null) {
 			log.error("Couldn't resolve schema " + schema);
 		}
@@ -106,7 +113,7 @@ public class OutputXSD  {
 		JSONObject configuration = null;
 		if(schema.getJsonConfig() == null || schema.getJsonConfig().length() == 0) {
 			log.debug("Generating default configuration");
-			if(factory.getParser() == null) factory.setParser(xsdIS);
+			if(factory.getParser() == null) factory.setParser(new XSDParser(xsdIS, this.resolver));
 			configuration = factory.getConfiguration(true);
 			configuration.put("xsd", schema.getXsd());
 			schema.setJsonConfig(configuration.toString());
@@ -118,7 +125,7 @@ public class OutputXSD  {
 		
 		if(schema.getJsonOriginal() == null || reparse) {
 			// generate mapping template
-			if(factory.getParser() == null) factory.setParser(xsdIS);
+			if(factory.getParser() == null) factory.setParser(new XSDParser(xsdIS, this.resolver));
 			log.debug("Get schematron rules...");
 			Set<String> fsr = factory.getSchematronRules();
 			schema.setSchematronRules(fsr);
@@ -205,7 +212,7 @@ public class OutputXSD  {
 		
 		// Clear any cached objects in SchemaValidator
 		log.debug("Clear cached objects.");
-		SchemaValidator.clearCaches(schema);
+		this.schemaValidator.clearCaches(schema);
 	}
 	
 	public void setTextdata(String s) {

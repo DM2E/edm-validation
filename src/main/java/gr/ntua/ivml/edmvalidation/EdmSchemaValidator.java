@@ -1,12 +1,5 @@
 package gr.ntua.ivml.edmvalidation;
 
-import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
-import gr.ntua.ivml.edmvalidation.util.StringUtils;
-import gr.ntua.ivml.edmvalidation.xsd.OutputXSD;
-import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler;
-import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler.Error;
-import gr.ntua.ivml.edmvalidation.xsd.SchemaValidator;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +15,17 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
-import net.minidev.json.parser.ParseException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+
+import gr.ntua.ivml.edmvalidation.persistent.XmlSchema;
+import gr.ntua.ivml.edmvalidation.util.NameToStreamResolver;
+import gr.ntua.ivml.edmvalidation.xsd.OutputXSD;
+import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler;
+import gr.ntua.ivml.edmvalidation.xsd.ReportErrorHandler.Error;
+import gr.ntua.ivml.edmvalidation.xsd.SchemaValidator;
+import net.minidev.json.parser.ParseException;
 
 /**
  * @author Konstantin Baierer
@@ -41,6 +40,10 @@ public class EdmSchemaValidator {
 	
 	private XmlSchema xmlSchema;
 	
+	private SchemaValidator schemaValidator;
+	
+	private NameToStreamResolver resolver;
+	
 	/**
 	 * Creates an EdmSchemaValidator with a default schema path
 	 */
@@ -53,10 +56,15 @@ public class EdmSchemaValidator {
 	 * @param schemaPath path to EDM.xsd, either in classpath or as a file reference
 	 */
 	public EdmSchemaValidator(String schemaPath) {
+		// store the schema path in a resolver - by default look up everything inthe same folder as EDM.xsd
+		this.resolver = new NameToStreamResolver(schemaPath.substring(0, schemaPath.lastIndexOf('/')+1));
+		// init the SchemaValidator that contains a cache
+		this.schemaValidator = new SchemaValidator(resolver);
+		
 		this.xmlSchema = new XmlSchema();
 		this.xmlSchema.setXsd(schemaPath);
 		this.xmlSchema.setId(new Long(0));
-		this.xsd = new OutputXSD(xmlSchema);
+		this.xsd = new OutputXSD(xmlSchema, this.schemaValidator, resolver);
 		try {
 			this.xsd.processSchema(xmlSchema);
 		} catch (IOException | ParseException e) {
@@ -70,7 +78,7 @@ public class EdmSchemaValidator {
 	}
 	
 	public ReportErrorHandler validateAgainstEdm(String fname, boolean validateXsd, boolean validateSchematron) {
-		return validateAgainstEdm(StringUtils.resolveNameToInputStream(fname), validateXsd, validateSchematron);
+		return validateAgainstEdm(this.resolver.resolveNameToInputStream(fname), validateXsd, validateSchematron);
 	}
 
 	public ReportErrorHandler validateAgainstEdm(File file, boolean validateXsd, boolean validateSchematron) {
@@ -82,7 +90,7 @@ public class EdmSchemaValidator {
 	}
 
 	public ReportErrorHandler validateAgainstEdm(String fname) {
-		return validateAgainstEdm(StringUtils.resolveNameToInputStream(fname), true, true);
+		return validateAgainstEdm(this.resolver.resolveNameToInputStream(fname), true, true);
 	}
 
 	public ReportErrorHandler validateAgainstEdm(File file) {
@@ -98,8 +106,8 @@ public class EdmSchemaValidator {
 		ReportErrorHandler errXSD = null;
 		ReportErrorHandler errSCH = null;
 		try {
-			errXSD = SchemaValidator.validateXSD(s, xmlSchema);
-			errSCH = SchemaValidator.validateSchematron(s, xmlSchema);
+			errXSD = this.schemaValidator.validateXSD(s, xmlSchema);
+			errSCH = this.schemaValidator.validateSchematron(s, xmlSchema);
 		} catch (TransformerException | SAXException | IOException e) {
 			log.error("Validation failed (bug): ", e);
 		}

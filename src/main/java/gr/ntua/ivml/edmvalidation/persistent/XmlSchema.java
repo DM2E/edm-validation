@@ -53,7 +53,8 @@ public class XmlSchema {
 	String schematronXSL;
 	Date created;
 	Date lastModified;
-		
+	
+	
 	// helper functions
 	
 	
@@ -173,10 +174,6 @@ public class XmlSchema {
 	
 	public void setSchematronXSL(String xsl) {
 		this.schematronXSL = xsl;
-	}
-	
-	public Schema getSchema() throws SAXException, FileNotFoundException {
-		return SchemaValidator.getSchema(this);
 	}
 	
 	

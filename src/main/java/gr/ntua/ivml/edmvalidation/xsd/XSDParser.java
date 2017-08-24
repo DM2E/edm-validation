@@ -1,9 +1,6 @@
 package gr.ntua.ivml.edmvalidation.xsd;
 
-import gr.ntua.ivml.edmvalidation.util.StringUtils;
-
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigInteger;
@@ -17,14 +14,10 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -48,6 +41,11 @@ import com.sun.xml.xsom.XmlString;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
+import gr.ntua.ivml.edmvalidation.util.NameToStreamResolver;
+import gr.ntua.ivml.edmvalidation.util.StringUtils;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+
 public class XSDParser {
 	private static final Logger log = Logger.getLogger(XSDParser.class);
 
@@ -60,15 +58,20 @@ public class XSDParser {
 	
 	//private MappingCache cache = new MappingCache();
 	
-	public XSDParser(String xsd) {
+	private NameToStreamResolver resolver;
+	
+	public XSDParser(String xsd, NameToStreamResolver resolver) {
+		this.resolver = resolver;
 		this.initXSSchema(xsd);
 	}
 
-	public XSDParser(InputStream is) {
+	public XSDParser(InputStream is, NameToStreamResolver resolver) {
+		this.resolver = resolver;
 		this.initXSSchema(is);
 	}
 
-	public XSDParser(Reader reader) {
+	public XSDParser(Reader reader, NameToStreamResolver resolver) {
+		this.resolver = resolver;
 		this.initXSSchema(reader);
 	}
 
@@ -108,25 +111,7 @@ public class XSDParser {
 		};
 		this.parser.setErrorHandler(errorHandler);
 
-		this.parser.setEntityResolver(new EntityResolver() {
-
-			@Override
-			public InputSource resolveEntity(String publicID, String systemID) throws SAXException, IOException {
-				log.debug("Resolving: " + publicID + " => " + systemID);
-				
-				final InputSource isource = new InputSource();
-				final String name = systemID.replaceFirst(StringUtils.DUMMY_SYSTEMID_PREFIX, "");
-				final InputStream is = StringUtils.resolveNameToInputStream(name);
-				if (null != is) {
-					isource.setByteStream(is);
-					isource.setSystemId(StringUtils.DUMMY_SYSTEMID_PREFIX + name);
-				} else {
-					log.error("Can't resolve '" + name + "' in classpath or on disk.");
-				}
-				return isource;
-			}
-			
-		});
+		this.parser.setEntityResolver(this.resolver.createEntityResolver());
 		
 		this.parser.setAnnotationParser(new DomAnnotationParserFactory());
 
@@ -136,14 +121,14 @@ public class XSDParser {
 	}
 
 	private void initXSSchema(String schemaFileName) {
-		initXSSchema(StringUtils.resolveNameToInputStream(schemaFileName), schemaFileName);
+		initXSSchema(this.resolver.resolveNameToInputStream(schemaFileName), schemaFileName);
 	}
 
 	private void initXSSchema(Reader reader) {
 		initXSSchema(new ReaderInputStream(reader));
 	}
 	private void initXSSchema(InputStream is) {
-		initXSSchema(is, StringUtils.DUMMY_SYSTEMID_PREFIX + "rootStyleSheet");
+		initXSSchema(is, NameToStreamResolver.DUMMY_SYSTEMID_PREFIX + "rootStyleSheet");
 	}
 
 	private void initXSSchema(InputStream is, String systemId) {
