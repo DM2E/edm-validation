@@ -138,9 +138,20 @@ public class OutputXSD  {
 		String externalSchematron = null;
 		String schematronFilename = null;
 		if(configuration.containsKey("schematron")) {
-			schematronFilename = OutputXSD.class.getResource(configuration.get("schematron").toString()).getFile();					
+			if(OutputXSD.class.getResource(configuration.get("schematron").toString()) != null) {
+				schematronFilename = OutputXSD.class.getResource(configuration.get("schematron").toString()).getFile();
+			} else {
+				schematronFilename = configuration.get("schematron").toString();
+			}
+			
+			// schematronFilename = OutputXSD.class.getResource(configuration.get("schematron").toString()).getFile();					
 		} else {
-			schematronFilename = OutputXSD.class.getResource(schema.getXsd()).getFile() + ".sch";
+			if(OutputXSD.class.getResource(schema.getXsd()) != null) {
+				schematronFilename = OutputXSD.class.getResource(schema.getXsd()).getFile() + ".sch";
+			} else {
+				schematronFilename = schema.getXsd()+".sch";
+			}
+			// schematronFilename = OutputXSD.class.getResource(schema.getXsd()).getFile() + ".sch";
 		}
 		log.debug("-- schematron file: " + schematronFilename);
 
