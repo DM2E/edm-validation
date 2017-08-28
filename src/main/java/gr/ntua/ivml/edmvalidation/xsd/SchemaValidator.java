@@ -198,6 +198,7 @@ public class SchemaValidator {
 //					error.setSource(nresult.getAttributes().getNamedItem("location").getTextContent());
 		    		String textContent = nresult.getTextContent();
 		    		textContent = textContent.replaceAll("\\s\\s+", " ");
+		    		System.out.println("Schematron validation error message : "+textContent);
 					final String res = textContent.substring(textContent.indexOf('<')+1, textContent.indexOf('>'));
 					final String errMess = textContent.substring(textContent.indexOf('>') + 1);
 		    		error.setMessage(errMess);

@@ -22,16 +22,12 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:dcterms="http://purl.org/dc/terms/"  elementFormDefault="qualified"
+    xmlns:dcterms="http://purl.org/dc/terms/" elementFormDefault="qualified"
     xmlns:wgs84="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:ore="http://www.openarchives.org/ore/terms/"
     xmlns:rdaGr2="http://rdvocab.info/ElementsGr2/" 
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
-    xmlns:dcat="http://www.w3.org/ns/dcat#"
-    xmlns:cc="http://creativecommons.org/ns#"
-    xmlns:svcs="http://rdfs.org/sioc/services#"
-        xmlns:doap="http://usefulinc.com/ns/doap#"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
 
     <import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="DC.xsd"/>
@@ -44,13 +40,10 @@
     <import namespace="http://xmlns.com/foaf/0.1/" schemaLocation="FOAF.xsd"/>
     <import namespace="http://www.openarchives.org/ore/terms/" schemaLocation="ORE.xsd"/>
     <import namespace="http://www.w3.org/2004/02/skos/core#" schemaLocation="SKOS.xsd"/>
-    <import namespace="http://www.w3.org/ns/dcat#" schemaLocation="DCAT.xsd"/>
-   	<import namespace="http://creativecommons.org/ns#" schemaLocation="CC.xsd"/>
-    <import namespace="http://rdfs.org/sioc/services#" schemaLocation="SVCS.xsd"/>
-    <import namespace="http://usefulinc.com/ns/doap#" schemaLocation="DOAP.xsd"/>
+
     <include schemaLocation="EDM-COMMON-MAIN.xsd"/>
     <include schemaLocation="CONTEXTS.xsd"/>
-    
+ 
     <complexType name="RDF">
         <annotation>
             <documentation> The RDF root element declaration </documentation>
@@ -77,10 +70,6 @@
             <element ref="ore:Aggregation" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="ore:Proxy"  minOccurs="1" maxOccurs="unbounded"/>
             <element name="EuropeanaAggregation" type="edm:EuropeanaAggregationType" minOccurs="1" maxOccurs="unbounded"/>
-            <element ref="cc:License" minOccurs="0" maxOccurs="unbounded"/>
-            <element ref="foaf:Organization" minOccurs="0" maxOccurs="unbounded"/>
-            <element ref="dcat:Dataset" minOccurs="0" maxOccurs="unbounded"/>
-            <element ref="svcs:Service" minOccurs="0" maxOccurs="unbounded"/>
         </sequence>
     </complexType>
 
@@ -100,23 +89,22 @@
                     </sch:rule>
                 </sch:pattern>
             </appinfo>
-            
         </annotation>
 
+        
         <complexContent>
             <extension base="rdf:AboutType">
                 <sequence>
                     <element ref="dc:creator" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:aggregatedCHO" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:collectionName" maxOccurs="1" minOccurs="0"/>
-                    <element ref="edm:datasetName" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:country" maxOccurs="1" minOccurs="1"/>
                     <element ref="edm:hasView" maxOccurs="unbounded" minOccurs="0"/>
                     <element ref="edm:isShownBy" maxOccurs="1" minOccurs="0"/>                    
                     <element ref="edm:preview" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:landingPage" maxOccurs="1" minOccurs="0"/>
                     <element ref="edm:language" maxOccurs="1" minOccurs="1"/>
-                    <element ref="edm:rights" maxOccurs="1" minOccurs="0"/>
+                    <element ref="edm:rights" maxOccurs="1" minOccurs="1"/>
                     <element ref="ore:aggregates" maxOccurs="unbounded" minOccurs="0"/>
                 </sequence>
             </extension>
