@@ -199,10 +199,23 @@ public class SchemaValidator {
 		    		String textContent = nresult.getTextContent();
 		    		textContent = textContent.replaceAll("\\s\\s+", " ");
 		    		System.out.println("Schematron validation error message : "+textContent);
-					final String res = textContent.substring(textContent.indexOf('<')+1, textContent.indexOf('>'));
-					final String errMess = textContent.substring(textContent.indexOf('>') + 1);
-		    		error.setMessage(errMess);
-		    		error.setSource(res);
+					if(textContent.indexOf('<') > -1) {
+						final String res = textContent.substring(textContent.indexOf('<')+1, textContent.indexOf('>'));
+						final String errMess = textContent.substring(textContent.indexOf('>') + 1);
+			    		error.setMessage(errMess);
+			    		error.setSource(res);
+					} else if(textContent.startsWith("id: ")){
+						final int indexOfIdEnd = textContent.substring("id: ".length()).indexOf(" ")+"id: ".length();
+						final String res = textContent.substring("id: ".length(), indexOfIdEnd);
+						final String errMess = textContent.substring(indexOfIdEnd + 1);
+			    		error.setMessage(errMess);
+			    		error.setSource(res);
+					} else {
+						// default
+						error.setMessage(textContent);
+						error.setSource(textContent);
+					}
+		    		
 		    		
 		    		handler.addError(error);
 		    	}
